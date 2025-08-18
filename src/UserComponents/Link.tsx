@@ -58,7 +58,7 @@ export const UserLinksTable = () => {
                   </td>
                   <td className="py-3 px-4">
                     <a
-                      href={link.shortURL}
+                      href={link.URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[#007c8c] font-medium hover:underline"

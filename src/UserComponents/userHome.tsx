@@ -28,7 +28,7 @@ export const UserHome = () => {
     if (!user) return;
 
     if (!isValidUrl(url)) {
-      setError("Please enter a valid URL");
+      setError("We'll need a valid URL, like yourbrnd.co/niceurl");
       return;
     }
     
