@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+.starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  box-shadow:
+    10px 20px white,
+    50px 80px white,
+    100px 40px white,
+    150px 70px white,
+    200px 100px white,
+    250px 150px white,
+    300px 200px white,
+    350px 250px white;
+  pointer-events: none; 
+  z-index: -1;
+}
