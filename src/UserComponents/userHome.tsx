@@ -2,33 +2,58 @@ import { useNavigate } from "react-router-dom";
 import { useLinkStore } from "../store/useLink";
 import { useState } from "react";
 import { useUser } from "../store/userStore";
-import  { useNavStore } from "../store/acriveNav";
+import { useNavStore } from "../store/acriveNav";
 export const UserHome = () => {
-  const [url,setUrl]= useState('')
-  const {createLink} =useLinkStore()
-  const {user} = useUser()
-  const {setNavActive} = useNavStore()
-  const navigate = useNavigate()
-  
-  
-  const handleCreate = async() => {
-  if (!url.trim()) return;
-     if (!user) return;
-  await createLink(url,user.uid); 
-  console.log(url)
-  setNavActive(2)
-  navigate("/dashboard/link");
-};
-  return (<>  
-    
-   <nav style={{fontFamily: "'Inter', sans-serif"}} className="max-w-md mx-auto p-4 pt-[100px] md:max-w-[85%] md:relative left-[114px] md:overflow:hidden ">
+  const [url, setUrl] = useState("");
+  const { createLink } = useLinkStore();
+  const { user } = useUser();
+  const { setNavActive } = useNavStore();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  const isValidUrl = (string: string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const handleCreate = async () => {
+      if (!url.trim()) {
+    setError("Please enter a URL");
+    return;
+  }
+    if (!user) return;
+
+    if (!isValidUrl(url)) {
+      setError("Please enter a valid URL");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      await createLink(url, user.uid);
+      console.log(url);
+      setNavActive(2);
+      navigate("/dashboard/link");
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <>
+      <nav
+        style={{ fontFamily: "'Inter', sans-serif" }}
+        className="max-w-md mx-auto p-4 pt-[100px] md:max-w-[85%] md:relative left-[114px] md:overflow:hidden "
+      >
         <div className="md:flex justify-around md:max-w-full md:p-4 ">
           <h1 className="text-3xl font-bold text-slate-800  ">
-            Your Connections  <br className="md:hidden"/>Platform
-            
+            Your Connections <br className="md:hidden" />
+            Platform
           </h1>
-          
+
           <div className="w-full flex flex-col gap-2 justify-center mt-4 mb-4 md:flex-row  ">
             <div className=" flex justify-center items-center gap-2 md:gap-0 ">
               <svg
@@ -48,7 +73,10 @@ export const UserHome = () => {
               </svg>
               <span className="text-[#11becf] text-sm ">
                 Get Custom Links and a Complimentary Domain.
-              </span><span className="hidden  md:block text-[#11becf] text-sm underline ">Upgrade Now</span>
+              </span>
+              <span className="hidden  md:block text-[#11becf] text-sm underline ">
+                Upgrade Now
+              </span>
             </div>
             <div className="px-8">
               <button className="bg-[#007c8c] text-[13px] text-white border rounded-md px-10 py-[7px] self-start font-bold md:hidden">
@@ -109,22 +137,35 @@ export const UserHome = () => {
             <h2 className="font-semibold text-base text-slate-800 mb-4 ">
               Enter your destination URL
             </h2>
-            <div className="w-full flex flex-col gap-4 md:flex-row md:gap-10" >
-              <input
-                className="w-full mx-auto px-3  py-2 border-b border-gray-300 outline-none active:border-2 border-gray-400 rounded-lg focus:border-2 border-gray-400 rounded-lg md:w-[50%] md:mx-0"
-                value={url}
-                onChange={(e)=>setUrl(e.target.value)}
-                type="url"
-                inputMode="url"
-                placeholder="https://example.com/my-long-url"
-              />
-              <button onClick={handleCreate} className="cursor-pointer bg-[#2a5bd7] text-white px-8 py-2 border-none rounded-md active:bg-[#022d94] md:text-base md:hover:bg-[#022d94]">
-                Create your Linkify link
+            <div className="w-full flex flex-col gap-4 md:flex-row md:gap-10">
+              <div className="flex flex-col w-full md:w-[50%]">
+                <input
+                  className={`w-full px-3 py-2 border rounded-lg outline-none ${
+                    error ? "border-red-500" : "border-gray-400"
+                  } focus:border-2 focus:border-gray-400`}
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  type="text"
+                  inputMode="url"
+                  placeholder="https://example.com/my-long-url"
+                />
+                <span className="self-start text-red-500 text-sm mt-1 h-[1rem]">
+                  {error || " "}
+                </span>
+              </div>
+              <div>
+              <button
+                disabled={loading}
+                onClick={handleCreate}
+                className="cursor-pointer bg-[#2a5bd7] text-white px-8 py-2 border-none rounded-md active:bg-[#022d94] md:text-base md:hover:bg-[#022d94]"
+              >
+                {loading ? "Creating link..." : "Create your Linkify link"}
               </button>
+              </div>
             </div>
           </div>
         </div>
       </nav>
-       
-</>)  
-}
+    </>
+  );
+};

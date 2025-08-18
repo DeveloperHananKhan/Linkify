@@ -1,25 +1,35 @@
-import { useLinkStore } from "../store/useLink"
-import { useUser } from "../store/userStore"
+import { useState } from "react";
+import { useLinkStore } from "../store/useLink";
+import { useUser } from "../store/userStore";
 
 export const UserLinksTable = () => {
-  const { links, deleteLink } = useLinkStore()
-  const { user } = useUser()
+  const { links, deleteLink } = useLinkStore();
+  const { user } = useUser();
 
-  const userLinks = links.filter((link) => link.userId === user?.uid)
+  const userLinks = links.filter((link) => link.userId === user?.uid);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const deleteFunction = async (id: string) => {
+    setDeletingId(id);
+    try {
+      await deleteLink(id);
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <section
       style={{ fontFamily: "'Inter', sans-serif" }}
       className="max-w-4xl mx-auto mt-20 px-4"
-    >  <div className="flex justify-between items-center mb-6">
-      <h2 className="text-2xl font-bold text-slate-800 ">
-        Your Saved Links
-      </h2>   
-      
-        <button className="bg-[#2a5bd7] text-white p-2 rounded-lg cursor-pointer active:bg-[#365ec2] lg:hover:bg-[#365ec2]">Create Link</button>
-   
-      </div>
+    >
+      {" "}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-slate-800 ">Your Saved Links</h2>
 
+        <button className="bg-[#2a5bd7] text-white p-2 rounded-lg cursor-pointer active:bg-[#365ec2] lg:hover:bg-[#365ec2]">
+          Create Link
+        </button>
+      </div>
       {user && userLinks.length > 0 ? (
         <div className="overflow-x-auto rounded-lg shadow-md">
           <table className="w-full text-left border-collapse">
@@ -59,19 +69,25 @@ export const UserLinksTable = () => {
                   <td className="py-3 px-4 flex justify-center gap-3">
                     <button
                       onClick={() => console.log("Edit", link.id)}
-                      className="px-3 py-1 text-sm rounded-md bg-[#11becf] text-white hover:bg-[#0da8b8] transition"
+                      className="cursor-pointer px-3 py-1 text-sm rounded-md bg-[#11becf] text-white hover:bg-[#0da8b8] transition"
                     >
                       Edit
                     </button>
                     <button
-                      onClick={() => deleteLink(link.id)}
-                      className="px-3 py-1 text-sm rounded-md bg-red-500 text-white hover:bg-red-600 transition"
+                      disabled={deletingId === link.id}
+                      className="cursor-pointer px-3 py-1 bg-red-500 text-white rounded"
+                      onClick={() => deleteFunction(link.id)}
                     >
-                      Delete
+                      {deletingId === link.id ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        "Delete"
+                      )}
                     </button>
+
                     <button
                       onClick={() => console.log("Export", link.id)}
-                      className="px-3 py-1 text-sm rounded-md bg-gray-700 text-white hover:bg-gray-900 transition"
+                      className="cursor-pointer px-3 py-1 text-sm rounded-md bg-gray-700 text-white hover:bg-gray-900 transition"
                     >
                       Export
                     </button>
@@ -85,5 +101,5 @@ export const UserLinksTable = () => {
         <p className="text-gray-500 text-center">No links saved yet.</p>
       )}
     </section>
-  )
-}
+  );
+};
