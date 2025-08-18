@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { useAuthHandlers } from "../backEnd/signIn";
+
 export const NavBar = () => {
-  const {login} = useAuthHandlers()
+
   return (
     <>
       <nav className="bg-white w-full flex justify-between py-3 px-4  md:justify-around  " style={{ fontFamily: "'Inter', sans-serif",background: 'radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%)' }}>
