@@ -12,7 +12,7 @@ const provider = new GoogleAuthProvider();
 
 export const useAuthHandlers = () =>{
 
-const { user, setUser } = useUser()
+const {  setUser } = useUser()
 const  {fetchLinks} = useLinkStore()
 const navigate =useNavigate()
 
@@ -26,7 +26,7 @@ await signInWithPopup(auth, provider)
       throw new Error("No credential returned from Google sign-in.");
     }
 
-    const token = credential.accessToken;
+   
     // The signed-in user info.
     const user = result.user;
     // IdP data available using getAdditionalUserInfo(result)
@@ -37,13 +37,7 @@ await signInWithPopup(auth, provider)
      navigate("/dashboard/home")
     // ...
   }).catch((error) => {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
+   console.log('there is error',error)
     // ...
   });}
 
@@ -55,6 +49,7 @@ await signInWithPopup(auth, provider)
   navigate("/")
   }).catch((error) => {
     // An error happened.
+    console.log(error)
   });
   }
 return {login,Logout}
