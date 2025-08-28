@@ -5,8 +5,11 @@ import { SignOut } from "./userSignOut";
 import { useNavigate,Outlet } from "react-router-dom";
 import { useNavStore } from "../store/acriveNav"
 import type {NavItem} from "../store/acriveNav"
-
-export const UserNav = () => {
+interface UserNavProps {
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+}
+export const UserNav = ({query,setQuery}:UserNavProps) => {
   const {user} = useUser()
    const {isOpen,toggle} = useModalStore()
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -47,6 +50,8 @@ const handleNav = (item :NavItem) => {
             </svg>
           </button>
           <input
+          value={query}
+          onChange={(e)=> setQuery(e.target.value)}
             type="text"
             className="w-full border rounded-md px-10 py-2 t "
             placeholder="Search..."
@@ -131,7 +136,7 @@ const handleNav = (item :NavItem) => {
                 <path fill="none" d="M0 0h24v24H0z"></path>
                 <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
               </svg></button>
-              <input className="hidden md:block px-8 py-2 outline-none shadow-[0_2px_4px_rgba(0,0,0,0.2)] active:border-2 border-blue-500 rounded-md" type="text"  placeholder="Serach..."/>
+              <input value={query} onChange={(e)=>setQuery(e.target.value)} className="hidden md:block px-8 py-2 outline-none shadow-[0_2px_4px_rgba(0,0,0,0.2)] active:border-2 border-blue-500 rounded-md" type="text"  placeholder="Serach..."/>
               </div>
               <button className="cursor-pointer active:bg-[#2a6f78] hidden  md:block bg-[#007c8c] text-white px-6 py-2 rounded-lg font-semi-bold hover:bg-[#2a6f78]">Upgrade</button>
             <button onClick={() =>{ setSearchOpen(true);

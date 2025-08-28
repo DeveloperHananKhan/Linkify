@@ -137,9 +137,12 @@ export const useNavStore = create<NavActive>((set)=>({
     },
   ],
 
-activeNav : 1,
+ activeNav: Number(sessionStorage.getItem("activeNav")) || 1,
 
- setNavActive : (id:number) => set({ activeNav: id })
+  setNavActive: (id: number) => {
+    sessionStorage.setItem("activeNav", JSON.stringify(id));
+    set({ activeNav: id });
+  },
 
 
 

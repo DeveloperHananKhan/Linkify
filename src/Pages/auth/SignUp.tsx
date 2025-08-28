@@ -1,4 +1,4 @@
-import { useAuthHandlers } from "../backEnd/signIn";
+import { useAuthHandlers } from "../../backEnd/signIn";
 import { useNavigate, Link } from "react-router-dom";
 
 export const SignUp = () => {

@@ -5,13 +5,12 @@ import { useUser } from "../store/userStore";
 import { useNavStore } from "../store/acriveNav";
 export const UserHome = () => {
   const [url, setUrl] = useState("");
-  const { createLink } = useLinkStore();
+  const { createLink,links } = useLinkStore();
   const { user } = useUser();
   const { setNavActive } = useNavStore();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
   const isValidUrl = (string: string) => {
     try {
       new URL(string);
@@ -31,6 +30,11 @@ export const UserHome = () => {
       setError("We'll need a valid URL, like yourbrnd.co/niceurl");
       return;
     }
+      const duplicateURL = links.some((l) => l.URL === url);
+  if (duplicateURL) {
+    setError("This URL already exists!");
+    return;
+  }
     
     setLoading(true);
     try {
@@ -157,6 +161,12 @@ export const UserHome = () => {
               <button
                 disabled={loading}
                 onClick={handleCreate}
+                onKeyDown={(e)=>{
+                  if(e.key === "Enter"){
+                    e.preventDefault();
+                    handleCreate()
+                  }
+                }}
                 className="cursor-pointer bg-[#2a5bd7] text-white px-8 py-2 border-none rounded-md active:bg-[#022d94] md:text-base md:hover:bg-[#022d94]"
               >
                 {loading ? "Creating link..." : "Create your Linkify link"}

@@ -31,11 +31,15 @@ setUser: (user)=>{
 
 interface ModalStore {
   isOpen: boolean;
+  isEditLinkOpen: boolean;
+  editLinkToggle: () => void;
   toggle: () => void;
 }
 
 
 export const useModalStore = create<ModalStore>((set) => ({
   isOpen: false,
+   isEditLinkOpen: false,
+   editLinkToggle: () => set((state) => ({isEditLinkOpen: !state.isEditLinkOpen})),
   toggle: () => set((state) => ({ isOpen: !state.isOpen })),
 }));
