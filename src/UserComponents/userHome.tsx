@@ -149,6 +149,13 @@ export const UserHome = () => {
                   } focus:border-2 focus:border-gray-400`}
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
+                   onKeyDown={(e)=>{
+                  if(e.key === "Enter"){
+                    e.preventDefault();
+                    console.log('clicked')
+                    handleCreate()
+                  }
+                }}
                   type="text"
                   inputMode="url"
                   placeholder="https://example.com/my-long-url"
@@ -161,12 +168,7 @@ export const UserHome = () => {
               <button
                 disabled={loading}
                 onClick={handleCreate}
-                onKeyDown={(e)=>{
-                  if(e.key === "Enter"){
-                    e.preventDefault();
-                    handleCreate()
-                  }
-                }}
+               
                 className="cursor-pointer bg-[#2a5bd7] text-white px-8 py-2 border-none rounded-md active:bg-[#022d94] md:text-base md:hover:bg-[#022d94]"
               >
                 {loading ? "Creating link..." : "Create your Linkify link"}
